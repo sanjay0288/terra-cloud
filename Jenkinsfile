@@ -81,9 +81,9 @@ pipeline {
             }
         }
 
-        stage('Deploy Prometheus') {
+        stage('Deploy dependencies') {
             steps {
-                sh 'ansible-playbook prometheus.yml -i inventory/hosts'
+                sh 'ansible-playbook dependencies.yml -i inventory/hosts'
             }
         }
         stage('Destroy') {
