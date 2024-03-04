@@ -1,6 +1,6 @@
 #security group
-resource "aws_security_group" "webserver_access" {
-        name = "webserver_access"
+resource "aws_security_group" "webserver23_access" {
+        name = "webserver23_access"
         description = "allow ssh and http"
 
         ingress {
@@ -31,7 +31,7 @@ resource "aws_instance" "ourfirst" {
   ami           = "ami-03bb6d83c60fc5f7c"
   availability_zone = "ap-south-1a"
   instance_type = "t2.micro"
-  security_groups = ["${aws_security_group.webserver_access.name}"]
+  security_groups = ["${aws_security_group.webserver23_access.name}"]
   key_name = "key2"
   user_data = filebase64("install_httpd.sh")
   tags = {
