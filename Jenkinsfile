@@ -85,7 +85,7 @@ pipeline {
             steps {
                 sh 'ansible-playbook prometheus.yml -i inventory/hosts'
             }
-        
+        }
         stage('Destroy') {
             when {
                 equals expected: true, actual: params.destroy
