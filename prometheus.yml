@@ -1,4 +1,0 @@
-- name: Install Prometheus
-  hosts: all
-  roles:
-    - prometheus

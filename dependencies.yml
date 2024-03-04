@@ -1,0 +1,22 @@
+---
+- name: update_and_package_installation_ubuntu
+  when: ansible_distribution == "Ubuntu"
+  apt:
+    name: ["tar", "wget", "default-jre"]
+    update_cache: yes
+    state: present
+  ignore_errors: yes
+
+- name: Install Maven
+      ansible.builtin.package:
+        name: maven
+        state: present
+
+- name: download_tomcat
+  shell: cd /opt/ && wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.85/bin/apache-tomcat-9.0.85.tar.gz && tar -xvzf apache-tomcat-9.0.85.tar.gz
+
+- name: changes_in_webapps
+  shell: sed -i 's/8080/8082/g' /opt/apache-tomcat-9.0.85/conf/server.xml && sed -i  '21s/^/<!--/g' "/opt/apache-tomcat-9.0.85/webapps/host-manager/META-INF/context.xml" && sed -i  '22s/$/-->/g' "/opt/apache-tomcat-9.0.85/webapps/host-manager/META-INF/context.xml" && sed -i  '21s/^/<!--/g' "/opt/apache-tomcat-9.0.85/webapps/manager/META-INF/context.xml" && sed -i  '22s/$/-->/g' "/opt/apache-tomcat-9.0.85/webapps/manager/META-INF/context.xml" && sed -i -e '55 a\<role rolename="manager-gui" /> \n<user username="shashi" password="Welcome1" roles="manager-gui" /> \n<!-- user admin can access manager and admin section both --> \n<role rolename="admin-gui" /> \n<user username="shashi" password="Welcome1" roles="manager-gui, admin-gui" />' "/opt/apache-tomcat-9.0.85/conf/tomcat-users.xml"
+- name: shutdown_start
+  become: true
+  shell: cd /opt/apache-tomcat-9.0.85/bin/ && ./shutdown.sh && sleep 5 && ./startup.sh
