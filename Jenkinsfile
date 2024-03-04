@@ -80,6 +80,11 @@ pipeline {
                 sh "terraform apply -input=false tfplan"
             }
         }
+
+        stage('Deploy Prometheus') {
+            steps {
+                sh 'ansible-playbook prometheus.yml -i inventory/hosts'
+            }
         
         stage('Destroy') {
             when {
